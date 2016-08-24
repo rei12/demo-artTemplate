@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<title>js</title>
+
+</head>
+
+<style>
+    *{ margin:0; padding:0;}
+    .a{
+    	width: 100px;
+    	height: 100px;
+    	background-color: red;
+    	position: absolute;
+    	/*top:-100px;
+    	left: 50%;
+    	margin-left: -50px;*/
+    }
+</style>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+
+<body>
+	<div class="a" id="a"></div>
+	
+</body>
+<script type="text/javascript">
+	var w="var data = {list : [";
+	var num=4;
+	for(var i=0;i<num;i++){
+		var s="";
+		var time=new Date();
+		var p=Math.random()>0.5?(parseInt(Math.random()*100000)/100):(Math.random()>0.5?(parseInt(Math.random()*1000)):(parseInt(Math.random()*10000)/10));
+		var b=parseInt(Math.random()*100);
+		var xl=parseInt(Math.random()*10000);
+		var xl2=parseInt(Math.random()*200+xl);
+		s="{title : '第"+i+"个标题',url:'##',img_url:'##',time:'"+time+"',price:'"+p+"',yongj:'"+b+"%',xl:'"+xl+"件',xl2:'"+xl2+"件',tui_url:'##'}";
+		w=w+s;
+		if(i!=num-1){
+			w=w+","
+		}
+
+	}
+	w=w+"]}"
+	$("#a").html(w);
+	console.log(w);
+</script>
+</html>

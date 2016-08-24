@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>demo</title>
+<script src="js/template.js"></script>
+<script src="js/jquery-1.7.1.min.js"></script>
+
+</head>
+	<style type="text/css">
+		li{
+			float:left;
+			width: 200px;
+			height: 300px;
+			overflow: hidden;
+			margin-right: 15px;
+			margin-bottom: 15px;
+		}
+                .top_line span{
+                        padding: 2px 5px;
+                        cursor: pointer;
+                }
+                .top_line span i{
+                        font-style: normal;
+                        font-weight: bold;
+                }
+	</style>
+
+<body>
+<div class="top_line">
+        <span data-pos="1">时间</span>
+        <span data-pos="2">价格</span>
+        <span data-pos="3">佣金</span>
+        <span data-pos="4">销量</span>
+        <span data-pos="5">总销量</span>
+</div>
+
+<div id="content"></div>
+<script id="test" type="text/html">
+<ul id="ul_list">
+{{each list as item i}}
+        <li>
+                <a class="pos" data-type="mix" href={{item.url}}>{{item.title}}</a><br>
+        	<span class="pos" data-type="mix">时间:{{item.time}}</span><br>
+        	<span class="pos" data-type="string">价格:{{item.price}}</span><br>
+        	<span class="pos" data-type="string">通用佣金:{{item.yongj}}</span><br>
+                {{if item.xl}}
+        	<span class="pos" data-type="string">总销量:{{item.xl2}}</span><br>
+                {{/if}} 
+        	<a href={{tui_url}} class="ppp">点击打开</a>
+        </li>
+{{/each}}
+</ul>
+
+</script>
+<script src="js/json.js"></script>
+<script type="text/javascript">
+//         var k=[{"title" : '第0个标题',"url":'##',"img_url":'##',"time":'Thu Jul 14 2016 14:56:42 GMT+0800 (中国标准时间)',"price":'869.02',yongj:'64%',"xl":true,"xl2":'6999件',"tui_url":'##'}]
+//         var data = {list : k}
+</script>
+
+<script>
+var html = template('test', data)
+document.getElementById('content').innerHTML = html;
+</script>
+<script type="text/javascript">
+        (function(){
+                $('.top_line span').click(function(){
+                        var IsAsc = $(this).hasClass('th_asc');
+                        var pos = $(this).attr("data-pos");
+                        $('.top_line span').removeClass('th_asc').removeClass('th_desc');
+                        $('.top_line span').find('i').remove();
+                        if (IsAsc) {
+                                $(this).addClass('th_desc');
+                                $(this).append('<i>&nbsp;↓&nbsp;</i>');
+                        } else {
+                                $(this).addClass('th_asc');
+                                $(this).append('<i>&nbsp;↑&nbsp;</i>');
+                        }
+                        ChangeSort(pos,IsAsc);               
+                });
+                function ChangeSort(pos,flag){
+
+                        var rows=$("#ul_list").children().get();
+
+                        var type=$("#ul_list li:first").find(".pos").eq(pos).attr("data-type");
+                        rows.sort(function(li1,li2){
+                                var value1=li1.querySelectorAll(".pos")[pos].innerHTML||0;
+                                var value2=li2.querySelectorAll(".pos")[pos].innerHTML||0;
+                                if(type=="mix"){
+                                        if (flag) {
+                                                return value1.localeCompare(value2);
+                                        } else {
+                                                return value2.localeCompare(value1);
+                                        }
+                                }else if(type=="string"){
+                                        var r = /\d+(\.\d+)?%?/;
+                                        value1 = parseFloat(value1.match(r));
+                                        value2 = parseFloat(value2.match(r));
+                                        if (flag) {
+                                                return value1 - value2;
+                                        } else {
+                                                return value2 - value1;
+                                        } 
+                                }
+                        })
+                        for (var i = 0; i < rows.length; i++) {
+                               $('#ul_list').prepend(rows[i]);
+                        }  
+                }
+        })();
+
+</script>
+</body>
+</html>
